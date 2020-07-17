@@ -12,6 +12,9 @@ function eventListeners() {
 
   //Borrar tweets
   listaTweets.addEventListener("click", borrarTweet);
+
+  //Contenido cargado
+  document.addEventListener("DOMContentLoaded", localStorageListo);
 }
 
 //Funciones
@@ -23,21 +26,6 @@ function agregarTweet(e) {
 
   //Leer el valor del textarea
   const tweet = document.getElementById("tweet").value;
-
-  //Crear botón de eliminar
-  const botonEliminar = document.createElement("a");
-  botonEliminar.classList = "borrar-tweet";
-  botonEliminar.innerText = "X";
-
-  //Crear elemento y añadirle el contenido a la lista
-  const li = document.createElement("li");
-  li.innerText = tweet;
-
-  //Añade el boton de eliminar al tweet
-  li.appendChild(botonEliminar);
-
-  //añade el tweet a la lista
-  listaTweets.appendChild(li);
 
   //Añadir al Local Storage
   agregarTweetLocalStorage(tweet);
@@ -52,6 +40,29 @@ function borrarTweet(e) {
   }
 }
 
+//Mostrar datos de local storage en la lista
+
+function localStorageListo() {
+  let tweets;
+  tweets = obtenerTweetsLocalStorage();
+  tweets.forEach(function (tweet) {
+    //Crear botón de eliminar
+    const botonEliminar = document.createElement("a");
+    botonEliminar.classList = "borrar-tweet";
+    botonEliminar.innerText = "X";
+
+    //Crear elemento y añadirle el contenido a la lista
+    const li = document.createElement("li");
+    li.innerText = tweet;
+
+    //Añade el boton de eliminar al tweet
+    li.appendChild(botonEliminar);
+
+    //añade el tweet a la lista
+    listaTweets.appendChild(li);
+  });
+}
+
 //Agrega tweet a local storage
 function agregarTweetLocalStorage(tweet) {
   let tweets;
@@ -60,10 +71,11 @@ function agregarTweetLocalStorage(tweet) {
   //Añadir el nuevo tweet
   tweets.push(tweet);
 
-  //Convertir de string a arreglo para local storage
+  //Convertir de string a array para local storage
   localStorage.setItem("tweets", JSON.stringify(tweets));
 }
 
+//Comprobar que haya elementos en localstorage, retorna un array
 function obtenerTweetsLocalStorage() {
   let tweets;
 
